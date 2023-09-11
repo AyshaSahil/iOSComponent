@@ -5,53 +5,42 @@
 //  Created by Aysha Hameed on 11/09/2023.
 //
 
-protocol CanFly {
-    func fly()
+protocol AdvancedLifeSupport {
+    func performCPR()
 }
 
-class Bird {
+class EmergencyCallHandler {
+    var delegate: AdvancedLifeSupport?
+    func assessSituation() { print("Can you tell me what has happened?") }
+    func medicalEmergency() { delegate?.performCPR() }
+}
+
+struct Paramedic: AdvancedLifeSupport {
+    init(handler: EmergencyCallHandler) { handler.delegate = self }
+    func performCPR() { print("The paramedic does chest compressions, 30 per second.") }
+}
+
+class Doctor: AdvancedLifeSupport {
+    init(handler: EmergencyCallHandler) { handler.delegate = self }
+    func performCPR() { print("The doctor  does chest compressions, 30 per second.") }
+    func useStethescope() { print("Listening for heart sounds") }
+}
+
+class Surgeon: Doctor {
     
-    var isFemail = true
-    
-    func layEgg() {
-        if isFemail {
-            print("The bird makes a new bird in a shell.")
-        }
+    override func performCPR() {
+        super.performCPR()
+        print("Sings staying alive by the BeeGees")
     }
     
+    func useElectricDrill() { print("Whirrr......") }
 }
 
-class Eagle: Bird, CanFly {
-    func fly() {
-        print("The eagle flaps its wings and lifts off into the sky.")
-    }
-    
-    func soar() {
-        print("The eagle glidse in the air using air currents.")
-    }
-}
+let emilio = EmergencyCallHandler()
+let pete = Paramedic(handler: emilio)
+let angela = Surgeon(handler: emilio)
 
-class Penguin: Bird {
-    func swim() {
-        print("The penguin paddles through the water.")
-    }
-}
+emilio.assessSituation()
+emilio.medicalEmergency()
 
-struct FlyingMuseum {
-    func flyingDemo(flyingObject: CanFly) {
-        flyingObject.fly()
-    }
-}
 
-struct Aeroplane: CanFly {
-    func fly() {
-        print("The aeroplane uses its engine to lift off into the air.")
-    }
-}
-
-let myEagle = Eagle()
-let myPenguin = Penguin()
-let myPlane = Aeroplane()
-
-let museum = FlyingMuseum()
-museum.flyingDemo(flyingObject: myEagle)
